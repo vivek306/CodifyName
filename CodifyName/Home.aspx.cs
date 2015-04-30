@@ -15,9 +15,9 @@ namespace CodifyName
         // Initialize and start the Encoding/Decoding
         public string CodifyName(string input, string name, bool EncodeMe)
         {
-            char[] inputChar = input.ToUpper().ToArray();
-            char[] nameChar = name.Replace(@" ", "").ToUpper().Distinct().ToArray();
-            char[] alphabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ.,; ".ToCharArray();
+            char[] inputChar = input.ToArray();
+            char[] nameChar = name.Replace(@" ", "").Distinct().ToArray();
+            char[] alphabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.,!£$%^&*-_=+[]{}#~'@/?<>|1234567890(); ".ToCharArray();
             var listNamePositions = GetAlphabetPositions(nameChar, alphabets);
             while (listNamePositions.Count > 5)
                 listNamePositions.RemoveAt(listNamePositions.Count - 1);
@@ -95,17 +95,81 @@ namespace CodifyName
 
         protected void DecodeButton_Click(object sender, EventArgs e)
         {
-            string input = InputTextBox.Text;
-            string name = NameTextBox.Text;
-            ResultLabel.Text = CodifyName(input, name, false);
+            string input = q4.Value;
+            string name = q1.Value;
+            q4.Value = CodifyName(input, name, false);
         }
 
         protected void EncodeButton_Click(object sender, EventArgs e)
         {
-            string input = InputTextBox.Text;
-            string name = NameTextBox.Text;
-            ResultLabel.Text = CodifyName(input, name, true);
+            string input = q4.Value;
+            string name = q1.Value;
+            q4.Value = CodifyName(input, name, true);
         }
+
+        private void Reset(bool message, bool name, bool radio)
+        {
+            if (message)
+            {
+                messageLabel.InnerHtml = "Message";
+                messageLabel.Style.Add("color", "#3B3F45");
+            }
+            if (name)
+            {
+                nameLabel.InnerHtml = "What's your name?";
+                nameLabel.Style.Add("color", "#3B3F45");
+            }
+            if (radio)
+            {
+                radioLabel.InnerHtml = "What do you want to do?";
+                radioLabel.Style.Add("color", "#3B3F45");
+            }
+            TextRadio.Value = "";
+        }
+
+
+        protected void Button_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string radio = TextRadio.Value;
+                string input = q4.Value;
+                string name = q1.Value;
+                if (!string.IsNullOrEmpty(radio))
+                {
+                    if (name.ToCharArray().Distinct().Count() > 4)
+                    {
+                        if (radio == "encode")
+                            q4.Value = CodifyName(input, name, true);
+                        else if (radio == "decode")
+                            q4.Value = CodifyName(input, name, false);
+                        else
+                            q4.Value = q4.Value;
+                        Reset(true, true, true);
+                    }
+                    else
+                    {
+                        nameLabel.InnerHtml = "Your name should have atleast 5 distinct characters";
+                        nameLabel.Style.Add("color", "red");
+                        Reset(true, false, true);
+                    }
+                }
+                else
+                {
+                    radioLabel.InnerHtml = "Please select one of the two";
+                    radioLabel.Style.Add("color", "red");
+                    Reset(true, true, false);
+                }
+            }
+            catch (Exception)
+            {
+                messageLabel.InnerHtml = "Not valid message";
+                messageLabel.Style.Add("color", "red");
+                TextRadio.Value = "";
+            }
+
+        }
+
 
     }
 }
