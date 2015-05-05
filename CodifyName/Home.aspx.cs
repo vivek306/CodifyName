@@ -134,7 +134,7 @@ namespace CodifyName
             {
                 string radio = TextRadio.Value;
                 string input = q4.Value;
-                string name = q1.Value;
+                string name = q1.Value.ToLower() + q1.Value.ToUpper();
                 if (!string.IsNullOrEmpty(radio))
                 {
                     if (name.ToCharArray().Distinct().Count() > 4)
