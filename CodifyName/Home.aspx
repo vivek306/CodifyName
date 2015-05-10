@@ -17,6 +17,8 @@
     <link rel="stylesheet" type="text/css" href="css/component.css" />
     <link rel="stylesheet" type="text/css" href="css/cs-select.css" />
     <link rel="stylesheet" type="text/css" href="css/cs-skin-boxes.css" />
+    <link rel="stylesheet" type="text/css" href="css/vex.css" />
+    <link rel="stylesheet" type="text/css" href="css/vex-theme-wireframe.css" />
     <script src="js/modernizr.custom.js"></script>
 </head>
 <body>
@@ -25,7 +27,9 @@
 
         <div class="fs-form-wrap" id="fs-form-wrap">
             <div class="fs-title">
-                <h1>CodifyName()</h1>
+                <h1>CodifyName("Hi", "Vivek", <span style="color:darkblue">true</span>)</h1>
+                <br />
+                <button id="someeAd" onclick="showHostingProvider(this); return false;" class=" fs-submit">hosted by Somee</button>
             </div>
             <form id="myform" runat="server" class="fs-form fs-form-full" autocomplete="off">
                 <asp:ScriptManager ID="ScriptManager" runat="server"></asp:ScriptManager>
@@ -66,6 +70,7 @@
     <script src="js/fullscreenForm.js"></script>
     <script src="js/jquery-1.8.1.min.js"></script>
     <script src="js/jquery.autogrowtextarea.min.js"></script>
+    <script src="js/vex.combined.min.js"></script>
     <script>
         (function () {
             var formWrap = document.getElementById('fs-form-wrap');
@@ -102,7 +107,10 @@
         }
 
         function updateMessage(elmnt) {
-            elmnt.value = elmnt.value.replace(/(\r\n|\n|\r)/gm, "");
+            elmnt.value = $.trim(elmnt.value.replace(/(\r\n|\n|\r)/gm, ""));
+            if (elmnt.value.substring(1) == " ") {
+                elmnt.value.substring(1, elmnt.value.length)
+            }
             var messageLabel = document.getElementById('<%=messageLabel.ClientID %>');
             updateError(messageLabel, "Message", "#3B3F45");
         }
@@ -146,6 +154,41 @@
             //caused the postback
             $('#<%=q4.ClientID %>').autoGrow();
         }
+
+        function showHostingProvider(elmnt) {
+            vex.dialog.confirm({
+                message: 'Hosted Windows Virtual Server. 2.5GHz CPU, 1.5GB RAM, 60GB HDD. Try it now for $1!',
+                buttons: [
+                    $.extend({}, vex.dialog.buttons.YES, {
+                        text: 'Somee.com'
+                    }), $.extend({}, vex.dialog.buttons.NO, {
+                        text: 'Cancel'
+                    })
+                ],
+                callback: function (value) {
+                    if (value == true)
+                        window.location.href = "http://somee.com/VirtualServer.aspx";
+                    return console.log(value);
+                }
+            });
+        }
+
+
+        $('#someeAd').fadeOut();
+        //// Make all divs white
+        //function makeDivWhite() {
+        //    var allDivs = document.getElementsByTagName("div");
+        //    for (var i = 0, max = allDivs.length; i < max; i++) {
+        //        // Do something with the element here
+        //        allDivs[i].style.backgroundColor = "white";
+        //        if (i >= 10)
+        //            allDivs[i].style.display = "none";
+        //    }
+
+        //    vex.defaultOptions.className = 'vex-theme-wireframe';
+        //    $('#someeAd').fadeIn("slow");
+        //}
+        //setTimeout(function () { makeDivWhite() }, 5000);
 		</script>
 
 </body>
